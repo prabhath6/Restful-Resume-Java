@@ -1,0 +1,6 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="resume_restful">
+    <output-path>$PROJECT_DIR$/out/artifacts/resume_restful</output-path>
+    <root id="archive" name="resume_restful.war" />
+  </artifact>
+</component>
