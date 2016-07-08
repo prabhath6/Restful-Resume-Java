@@ -20,7 +20,7 @@ import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 
-//@Path("/")
+
 @Path("/{a:resume|}")
 public class Resume implements loginDetails {
 
@@ -64,6 +64,64 @@ public class Resume implements loginDetails {
         BasicDBObject result = (BasicDBObject) cursor.next();
 
         JSONObject obj = new JSONObject(result);
+
+        cursor.close();
+
+        return Response.status(200).entity(obj.toString()).build();
+    }
+
+    @Path("{param}")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getResumeSection(@PathParam("param") String param) {
+
+        DBCollection table = getObject();
+
+        DBObject allQuery = new BasicDBObject();
+        DBObject removeIdProjection = new BasicDBObject("_id", 0);
+
+        DBCursor cursor = table.find(allQuery, removeIdProjection);
+
+        BasicDBObject result = (BasicDBObject) cursor.next();
+        BasicDBObject contact = null;
+
+        switch (param) {
+            case "contact":
+
+                contact = (BasicDBObject) result.get("contact_info");
+
+                break;
+            case "experience":
+
+                contact = (BasicDBObject) result.get("Experience");
+
+                break;
+            case "skills":
+
+                contact = (BasicDBObject) result.get("Skills");
+
+                break;
+            case "links":
+
+                contact = (BasicDBObject) result.get("Links");
+
+                break;
+            case "education":
+
+                contact = (BasicDBObject) result.get("Education");
+
+                break;
+            case "projects":
+
+                contact = (BasicDBObject) result.get("Projects");
+
+                break;
+            default:
+                contact = (BasicDBObject) result.get("");
+                break;
+        }
+
+        JSONObject obj = new JSONObject(contact);
 
         cursor.close();
 
